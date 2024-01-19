@@ -1,24 +1,29 @@
 import argparse
 import sys
 from listener import Listener
+import threading
 
 def run_server(server_ip, server_port):
     """
     open server socket and start accepting client requests
     """
 
+    lock = threading.Lock()
     with Listener(server_port, server_ip) as listener:
-        print(repr(listener))
-        with listener.accept() as connection:
-            handle_client(connection)
+        while True:
+            with listener.accept() as connection:
+                t = threading.Thread(target=handle_client, args=(connection, lock))
+                t.start()
 
 
-def handle_client(connection):
+def handle_client(connection, lock):
     """
     recieve and print message from client
     """
+    lock.acquire()
     msg = connection.receive_message()
     print("Recieved " + msg)
+    lock.release()
 
 
 def get_args():
