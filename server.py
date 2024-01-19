@@ -2,6 +2,7 @@ import argparse
 import sys
 from listener import Listener
 import threading
+import card
 
 def run_server(server_ip, server_port):
     """
@@ -21,8 +22,11 @@ def handle_client(connection, lock):
     recieve and print message from client
     """
     lock.acquire()
+    
     msg = connection.receive_message()
-    print("Recieved " + msg)
+    rec_card = card.Card.deserialize(msg)
+    print("Recieved " + repr(rec_card))
+
     lock.release()
 
 

@@ -12,7 +12,7 @@ class Card:
 
     def __repr__(self) -> str:
         #return f"{self.name} {self.creator} {self.riddle} {self.solution} {self.image}"
-        return f"<Card name={self.name}, creator={self.creator}>"
+        return f"Card {self.name} made by {self.creator}"
     
     def __str__(self):
         sol_string = self.solution if self.solution else "unsolved"
@@ -28,8 +28,6 @@ class Card:
         nameb = self.name.encode()
         creatorb = self.creator.encode()
         riddleb = self.riddle.encode()
-        
-        print(self.image.height, self.image.width)
 
         # ¿Ser o no ser?
         ser = struct.pack(f"<I{len(nameb)}sI{len(creatorb)}sII{3 * self.image.width * self.image.height}s32sI{len(riddleb)}s", \

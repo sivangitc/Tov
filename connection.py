@@ -11,8 +11,7 @@ class Connection:
         return f"<Connection from {self.ip_src}:{self.port_src} to {self.ip_dst}:{self.port_dst}>"
     
     def send_message(self, msg):
-        self.sock.send(message.pack_msg(msg))
-        print("Sending " + msg)
+        self.sock.send(msg)
 
     def receive_message(self):
         msg = b""
@@ -22,7 +21,7 @@ class Connection:
             except:
                 raise Exception(f"Connection closed before finished recieving\n sock:{repr(self)}")
             if not rec:
-                return message.unpack_msg(msg)
+                return msg
             msg += rec
 
     def close(self):
