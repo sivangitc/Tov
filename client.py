@@ -9,6 +9,9 @@ import struct
 ###########################################################
 
 def pack_msg(msg):
+    """
+    prepare msg to send in format <length:msg>
+    """
     msgb = msg.encode()
     packed = struct.pack("<I%ds" % len(msgb), len(msgb), msgb)
     return packed
