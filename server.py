@@ -10,7 +10,14 @@ def run_server(server_ip, server_port):
 
     while (True):
         consock, addr = sock.accept()
-        packed = consock.recv(1024)
+        packed = "".encode()
+        while True:
+            newd = consock.recv(1024)
+            if not newd:
+                break
+            packed += newd
+
+
         data = unpack_msg(packed)
         print("Recieved data: " + data)
         consock.close()
