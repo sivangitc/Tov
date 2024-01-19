@@ -1,36 +1,19 @@
 import argparse
 import sys
-import socket
-import struct
+from connection import Connection
 
 
 ###########################################################
 ####################### YOUR CODE #########################
 ###########################################################
 
-def pack_msg(msg):
-    """
-    prepare msg to send in format <length:msg>
-    """
-    msgb = msg.encode()
-    packed = struct.pack("<I%ds" % len(msgb), len(msgb), msgb)
-    return packed
-
-
 def send_data(server_ip, server_port, data):
     '''
     Send data to server in address (server_ip, server_port).
     '''
-
-    sock = socket.socket()
-    sock.connect((server_ip, server_port))
-
-    packed = pack_msg(data)
-    sock.send(packed)
-    sock.close()
-
-    print("sending data:")
-    print(data)
+    with Connection.connect(server_ip, server_port) as con:
+        con.send_message(data)
+        print(repr(con))
     
 
 ###########################################################

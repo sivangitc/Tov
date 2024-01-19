@@ -1,52 +1,24 @@
 import argparse
 import sys
-import socket
-import struct
-import threading
+from listener import Listener
 
 def run_server(server_ip, server_port):
     """
     open server socket and start accepting client requests
     """
-    sock = socket.socket()
-    sock.bind((server_ip, server_port))
-    sock.listen(1)
 
-    lock = threading.Lock()
-
-    while (True):
-        consock, addr = sock.accept()
-        t = threading.Thread(target=handle_client, args=(consock, addr, lock))
-        t.start()
+    with Listener(server_port, server_ip) as listener:
+        print(repr(listener))
+        with listener.accept() as connection:
+            handle_client(connection)
 
 
-def handle_client(consock, addr, lock):
+def handle_client(connection):
     """
     recieve and print message from client
     """
-    lock.acquire()
-    packed = "".encode()
-    while True:
-        newd = consock.recv(1024)
-        if not newd:
-            break
-        packed += newd
-
-
-    data = unpack_msg(packed)
-    print("Recieved data: " + data)
-    consock.close()
-    lock.release()
-
-
-def unpack_msg(packed):
-    """
-    parse byted message in format <length,msg>
-    """
-    (slen,) = struct.unpack("I", packed[:4])
-    (msg,) = struct.unpack("%ds" % slen, packed[4:])
-    msg = msg.decode()
-    return msg
+    msg = connection.receive_message()
+    print("Recieved " + msg)
 
 
 def get_args():
