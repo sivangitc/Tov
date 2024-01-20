@@ -28,7 +28,7 @@ class Card:
         nameb = self.name.encode()
         creatorb = self.creator.encode()
         riddleb = self.riddle.encode()
-
+        
         # ¿Ser o no ser?
         ser = struct.pack(f"<I{len(nameb)}sI{len(creatorb)}sII{3 * self.image.width * self.image.height}s32sI{len(riddleb)}s", \
                           len(nameb), nameb, \
