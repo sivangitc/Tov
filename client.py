@@ -3,7 +3,7 @@ import sys
 from connection import Connection
 import card
 
-SERVER_IP = "10.100.102.76"
+SERVER_IP = "127.0.0.1"
 SERVER_PORT = 5000
 
 ###########################################################

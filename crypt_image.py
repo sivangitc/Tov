@@ -101,3 +101,6 @@ class CryptImage():
     def create_from_path(cls, path):
         im = Image.open(path)
         return cls(im, None)
+    
+    def save_to_path(self, path):
+        self.image.save(path)

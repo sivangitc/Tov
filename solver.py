@@ -33,8 +33,9 @@ import saver
 
 
 CARD_STR = 'Card {card.name} by {card.creator}'
-solved_dir = ''
 unsolved_dir = ''
+save_url = ''
+big_data_path = '/home/user/Desktop/images'
 
 class ChooseCardsForm(npyscreen.ActionForm):
 
@@ -115,7 +116,8 @@ class SolveCardForm(npyscreen.Form):
         (move card to solved card etc.)
         '''
         card.solution = solution
-        saver.Saver.save(card, solved_dir)
+        svr = saver.Saver(save_url, big_data_path)
+        svr.save(card)
         self.delete_from_unsolved(ser)
 
         print(f'{CARD_STR.format(card=card)} was solved correctly!')
@@ -135,7 +137,7 @@ class SolveCardForm(npyscreen.Form):
             i += 1
             p = (dirp / str(i))
         while pathlib.Path.exists(p):
-            p.rename(str(i - 1))
+            p.rename(dirp / str(i - 1))
             i += 1
             p = (dirp / str(i))
 
@@ -208,7 +210,7 @@ def get_args():
         parser = argparse.ArgumentParser(description='Start server.')
         parser.add_argument('unsolved_dir', type=str,
                             help='path to where unsolved cards are saved')
-        parser.add_argument('solved_dir', type=str,
+        parser.add_argument('save_url', type=str,
                             help='path to where solved cards are saved')
         return parser.parse_args()
 
@@ -233,10 +235,10 @@ def main():
     '''
     Implementation of CLI and getting data from client.
     '''
-    global solved_dir
+    global save_url
     global unsolved_dir
     args = get_args()
-    solved_dir = args.solved_dir
+    save_url = args.save_url
     unsolved_dir = args.unsolved_dir
     App = InteractiveCLI().run()
     try:

@@ -44,3 +44,9 @@ class Card:
         image = crypt_image.CryptImage(image, key_hash) # this is a CryptImage
         return cls(name=name, creator=creator, image=image, riddle=riddle, solution=None)
 
+    def parse_card(self): # -> metadata dict
+        return {'name':self.name, 'creator': self.creator, 'riddle': self.riddle, \
+                    'solution': self.solution}
+    
+    def save_image_to_path(self, path):
+        self.image.save_to_path(path)
