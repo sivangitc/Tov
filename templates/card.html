@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+    body{
+        max-width: max-content;
+        margin: auto;}
+
+    #showimgbutton { 
+        border-radius: 50%; 
+        width: 200px;
+        height: 200px;
+        border: none;
+        color: white;
+        font-family: Avenir, Arial, sans-serif;
+        font-weight: 900;
+        font-size: 2.5rem;
+        background: red;
+        text-shadow: 0 3px 1px rgba(122,17,8,.8);
+        box-shadow: 0 8px 0 rgb(183,9,0), 
+        0 15px 20px rgba(0,0,0,.35);
+        text-transform: uppercase;
+        transition: .4s all ease-in;
+        outline: none; 
+        cursor: pointer;
+        text-align: center;
+    }
+
+    #backbutton {
+        display: inline-block;
+        outline: none;
+        cursor: pointer;
+        font-weight: 600;
+        border-radius: 3px;
+        padding: 12px 24px;
+        border: 0;
+        color: #3a4149;
+        background: #eee;
+        line-height: 1.15;
+        font-size: 16px;
+        :hover {
+            transition: all .1s ease;
+            box-shadow: 0 0 0 0 #fff, 0 0 0 3px #1de9b6;
+        }
+    }
+    </style>
+</head>
+
+<body style="font-family:sans-serif">
+    <h1>{{name}}</h1>
+    <h3>Made by {{creator}}</h3>
+    <br>
+    <h2>Riddle</h2>
+    <p>{{riddle}}</p>
+    <h2>Solution</h2>
+    <p>{{solution}}</p>
+    <br>
+    <button id="showimgbutton" onclick="location.href='/creators/{{ creator }}/cards/{{ name }}/image.jpg'" type="button">Cyber</button>
+    <br> <br> <br>
+    <button id="backbutton" onclick="location.href='/creators/{{ creator }}'">Back</button>
+
+
+</body>
+
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+    body{
+    max-width: max-content;
+    margin: auto;
+    }
+
+    .vertical-menu {
+        width: 200px;
+    }
+    
+    .vertical-menu a {
+        background-color: #eee;
+        color: black;
+        display: block;
+        padding: 12px;
+        text-decoration: none;
+    }
+    
+    .vertical-menu a:hover {
+        background-color: #ccc;
+    }
+    </style>
+
+</head>
+
+<body style="font-family:sans-serif">
+    <h1>Creators</h1>
+
+    <div class="vertical-menu">
+    {% for creator in creators %}
+    <a href="/creators/{{ creator }}">{{ creator }}</a>
+    {% endfor %}
+    </div>
+
+</body>
+
+</html>

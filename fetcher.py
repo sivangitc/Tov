@@ -57,3 +57,9 @@ class Fetcher():
     def get_creators(self):
         return self.driver.get_creators()
     
+    def get_card(self, creator, name):
+        possible_cards = self.cards_from_creator(creator)
+        for card in possible_cards:
+            if card['name'] == name:
+                return card
+        raise(Exception('Card not found'))

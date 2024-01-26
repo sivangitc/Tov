@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <style>
+    body{
+    max-width: max-content;
+    margin: auto;
+    }
+    
+    .vertical-menu {
+        width: 200px;
+    }
+    
+    .vertical-menu a {
+        background-color: #eee;
+        color: black;
+        display: block;
+        padding: 12px;
+        text-decoration: none;
+    }
+    
+    .vertical-menu a:hover {
+        background-color: #ccc;
+    }
+
+    #backbutton {
+        display: inline-block;
+        outline: none;
+        cursor: pointer;
+        font-weight: 600;
+        border-radius: 3px;
+        padding: 12px 24px;
+        border: 0;
+        color: #3a4149;
+        background: #eee;
+        line-height: 1.15;
+        font-size: 16px;
+        :hover {
+            transition: all .1s ease;
+            box-shadow: 0 0 0 0 #fff, 0 0 0 3px #1de9b6;
+        }
+    }
+
+    </style>
+
+</head>
+
+<body style="font-family:sans-serif">
+    <h1>Cards by {{creator}}</h1>
+
+    <div class="vertical-menu">
+    {% for card in cards %}
+    <a href="/creators/{{ creator }}/cards/{{ card }}">{{ card }}</a>
+    {% endfor %}
+    </div>
+    <br>
+    <button id="backbutton" onclick="location.href='/creators'">Back</button>
+
+</body>
+
+</html>

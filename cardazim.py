@@ -1,49 +1,57 @@
 import flask
-import server
 import fetcher
 import json
+import argparse
 
 app = flask.Flask(__name__)
 HOST = '127.0.0.1'
 PORT = 5000
-SOLVED_URL = 'filesystem:///home/user/Desktop/solved'
-SOLVED_URL = 'mongodb://127.0.0.1:27017'
-#UNSOLVED_PATH = '/home/user/Desktop/unsolved'
-fet = fetcher.Fetcher(SOLVED_URL)
+fet = None
 
+@app.route('/')
 @app.route('/creators')
 def get_creators():
     # return list of creators
-    return fet.get_creators()
+    return flask.render_template('creators.html', creators=fet.get_creators())
 
 
-@app.route('/creators/<creator>')
-def get_creator_cards(creator):
+@app.route('/creators/<creator_name>')
+def get_creator_cards(creator_name):
     # return all cards from <creator>
-    return fet.cards_from_creator(creator)
+    cards_dict = fet.cards_from_creator(creator_name)
+    card_names = [card['name'] for card in cards_dict]
+    return flask.render_template('cards.html', creator=creator_name, cards=card_names)
 
 
 @app.route('/creators/<creator>/cards/<cardname>')
 def get_card(creator, cardname):
     # get card
-    possible_cards = get_creator_cards(creator)
-    for card in possible_cards:
-        if card['name'] == cardname:
-            return json.dumps(card)
-    raise(Exception('Card not found'))
+    card = fet.get_card(creator, cardname)
+    return flask.render_template('card.html', name=card['name'], creator=card['creator'], \
+                                    riddle=card['riddle'], solution=card['solution'])
+    #return json.dumps(card)
 
 
 @app.route('/creators/<creator>/cards/<cardname>/image.jpg')
 def get_image(creator, cardname):
     # get image of a card
-    card_dict = json.loads(get_card(creator, cardname))
+    card_dict = fet.get_card(creator, cardname)
     impath = card_dict['image_path'].split('/')    
     return flask.send_from_directory('/'.join(impath[:-1]), impath[-1], as_attachment=False)
 
 
-def run_api_server(host, port):
+def get_args():
+    parser = argparse.ArgumentParser(description='Start API')
+    parser.add_argument('database_url', type=str,
+                        help='where to save solved')
+    return parser.parse_args()
+
+def run_api_server(host, port, database_url='mongodb://127.0.0.1:27017'):
+    global fet
+    fet = fetcher.Fetcher(database_url)
     app.run(host=host, port=port)
 
 
 if __name__ == '__main__':
-    run_api_server(HOST, PORT)
+    db_url = get_args().database_url
+    run_api_server(HOST, PORT, db_url)
