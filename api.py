@@ -1,15 +1,14 @@
-import flask
-import server
-import fetcher
+from flask import Flask, send_from_directory
+from .fetcher import Fetcher
 import json
 
-app = flask.Flask(__name__)
+app = Flask(__name__)
 HOST = '127.0.0.1'
 PORT = 5000
 SOLVED_URL = 'filesystem:///home/user/Desktop/solved'
 SOLVED_URL = 'mongodb://127.0.0.1:27017'
 #UNSOLVED_PATH = '/home/user/Desktop/unsolved'
-fet = fetcher.Fetcher(SOLVED_URL)
+fet = Fetcher(SOLVED_URL)
 
 @app.route('/creators')
 def get_creators():
@@ -38,7 +37,7 @@ def get_image(creator, cardname):
     # get image of a card
     card_dict = json.loads(get_card(creator, cardname))
     impath = card_dict['image_path'].split('/')    
-    return flask.send_from_directory('/'.join(impath[:-1]), impath[-1], as_attachment=False)
+    return send_from_directory('/'.join(impath[:-1]), impath[-1], as_attachment=False)
 
 
 def run_api_server(host, port):
